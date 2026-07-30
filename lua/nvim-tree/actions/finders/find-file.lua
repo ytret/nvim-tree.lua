@@ -12,20 +12,21 @@ local running = {}
 
 ---Find a path in the tree, expand it and focus it
 ---@param path string relative or absolute
+---@return boolean found
 function M.fn(path)
   local explorer = core.get_explorer()
   if not explorer or not view.is_visible() then
-    return
+    return false
   end
 
   -- always match against the real path
   local path_real = vim.uv.fs_realpath(path)
   if not path_real then
-    return
+    return false
   end
 
   if running[path_real] then
-    return
+    return false
   end
   running[path_real] = true
 
@@ -92,6 +93,7 @@ function M.fn(path)
   running[path_real] = false
 
   log.profile_end(profile)
+  return found ~= nil
 end
 
 return M
