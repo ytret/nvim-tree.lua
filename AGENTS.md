@@ -352,26 +352,32 @@ This is hairy but necessary.
 
 When `config.view.width` is a table (with `min`, `max`, `lines_excluded`, `padding`), the tree width adapts to content. `view.grow_from_content()` scans all rendered lines + extmarks and resizes the window if wider than current. This runs on every draw.
 
-### 11. Live Filter
+### 11. Floating Tree Focus Loss
+
+`config.g.view.float.quit_on_focus_loss` defaults to `true`. `autocmd.lua` registers a `WinLeave` handler for `NvimTree_*` that calls `view.close()` when a floating tree loses focus. Therefore actions that call `vim.api.nvim_set_current_win()` while the tree float is active will close it (or leave an inactive/faded float when the option is `false`).
+
+`lib.target_winid` records the non-tree window active before `lib.open()` / tree focus and is intended as an **open-file target**, not a tree-focus target. To select that window's file *in the tree*, read `nvim_win_get_buf(target_winid)` / `nvim_buf_get_name()` without changing windows, then call `actions/finders/find-file.lua`. Its `fn(path)` resolves the real path, refreshes and expands collapsed ancestor directories, redraws, and positions the tree cursor; it returns whether it found a node. Check that the real path equals the explorer root or starts with `utils.path_add_trailing(explorer.absolute_path)` first—otherwise the file is outside the displayed tree and the action must not implicitly change root.
+
+### 12. Live Filter
 
 The live filter (`explorer/live-filter.lua`) is separate from the regular filters. It's an interactive search that shows a prompt in the tree buffer. When active, a filter line appears above the tree, and nodes are hidden/shown as the user types. The filter line is rendered as part of `build_header()`.
 
-### 12. Tab Sync
+### 13. Tab Sync
 
 `tab.sync.open` and `tab.sync.close` control whether opening/closing the tree in one tab affects all tabs. Each tab has its own buffer (`NvimTree_<tabnr>`) but shares the same Explorer (data). This can lead to stale renders — you need to call `explorer.renderer:draw()` after switching tabs.
 
-### 13. Pre/Post Setup API Hydration
+### 14. Pre/Post Setup API Hydration
 
 `api/impl.lua` has two phases:
 - `hydrate_pre_setup` — fills API entries that don't need config/setup state (called on module require)
 - `hydrate_post_setup` — fills API entries that need the explorer/config to be available (called after setup, and also every re-setup)
 
-### 14. `NvimTreeRequired` vs `NvimTreeSetup` events
+### 15. `NvimTreeRequired` vs `NvimTreeSetup` events
 
 - `NvimTreeRequired` — fires on first `require("nvim-tree")` (module load, before setup)
 - `NvimTreeSetup` — fires after `M.setup()` completes (and on every re-setup)
 
-### 15. COC + Native LSP Diagnostics
+### 16. COC + Native LSP Diagnostics
 
 Diagnostics module supports both native Neovim LSP (`DiagnosticChanged` autocmd) and COC (`CocDiagnosticChange` User event). They use different APIs to fetch diagnostics but converge on the same `NODE_SEVERITIES` cache.
 
