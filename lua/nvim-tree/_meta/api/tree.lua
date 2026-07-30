@@ -168,6 +168,13 @@ function nvim_tree.api.tree.find_file(opts) end
 ---@field focus? boolean
 
 ---
+---Focus the source window that was active before opening nvim-tree.
+---Does nothing if the source window is no longer valid.
+---
+---@return boolean true if the focus was successful
+function nvim_tree.api.tree.focus_source_win() end
+
+---
 ---Open the search dialogue.
 ---
 function nvim_tree.api.tree.search_node() end

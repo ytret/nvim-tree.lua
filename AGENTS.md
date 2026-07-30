@@ -379,6 +379,14 @@ Diagnostics module supports both native Neovim LSP (`DiagnosticChanged` autocmd)
 
 ## Testing / Debugging
 
+There is **no test infrastructure**: no unit tests, no integration tests, no `busted`/`plenary.nvim` harness. The pipeline runs only static analysis:
+
+- `luacheck` — lint
+- `luals-check.sh` — type checking (LuaLS), fueled by `_meta/` type stubs
+- `scripts/doc-comments.sh` — doc comment validation
+
+Debugging aids:
+
 - Logging: `config.log.enable = true` with `types.dev = true` for verbose tracing. Logs go to `vim.fn.stdpath("data")/nvim-tree.log`.
 - Profile: `log.profile_start("label")` / `log.profile_end(profile)` wraps operations with timing.
 - HiTest: `:NvimTreeHiTest` or `api.appearance.hi_test()` renders a sample of all highlight groups.
