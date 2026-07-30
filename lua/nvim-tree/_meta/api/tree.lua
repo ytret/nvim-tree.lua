@@ -168,10 +168,10 @@ function nvim_tree.api.tree.find_file(opts) end
 ---@field focus? boolean
 
 ---
----Focus the source window that was active before opening nvim-tree.
----Does nothing if the source window is no longer valid.
+---Focus the source file in the tree without leaving the tree window.
+---Does nothing if the source window is invalid or does not contain a file.
 ---
----@return boolean true if the focus was successful
+---@return boolean true if the source file was found
 function nvim_tree.api.tree.focus_source_win() end
 
 ---
@@ -234,7 +234,6 @@ function nvim_tree.api.tree.winid(opts) end
 ---
 ---[tab-ID] 0 or nil for current.
 ---@field tabpage? integer
-
 
 ---@deprecated use `nvim_tree.api.filter.toggle()`
 function nvim_tree.api.tree.toggle_enable_filters() end
