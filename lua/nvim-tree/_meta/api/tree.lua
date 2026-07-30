@@ -168,8 +168,8 @@ function nvim_tree.api.tree.find_file(opts) end
 ---@field focus? boolean
 
 ---
----Focus the source file in the tree without leaving the tree window.
----Does nothing if the source window is invalid or does not contain a file.
+---Expand and focus the source file in the tree without leaving the tree window.
+---Warns when the source file is outside the tree.
 ---
 ---@return boolean true if the source file was found
 function nvim_tree.api.tree.focus_source_win() end
